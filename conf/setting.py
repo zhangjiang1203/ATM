@@ -14,6 +14,7 @@ BASE_DBDIR = os.path.join(BASE_DIR,'db')
 #添加日志路径
 BASE_LOGDIR = os.path.join(BASE_DIR,'log')
 
-print(BASE_DIR)
-print(BASE_DBDIR)
-print(BASE_LOGDIR)
+if __name__ == "__main__":
+    print(BASE_DIR)
+    print(BASE_DBDIR)
+    print(BASE_LOGDIR)
