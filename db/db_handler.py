@@ -93,3 +93,41 @@ def record_user_operation(record):
     else:
         with open(path,'w',encoding='utf-8') as f_write:
             f_write.write(timeStr + '  ' + record + "\n")
+
+def shopping_record(shopcars):
+    '''
+    保存购物历史记录
+    :param shopcars:
+    :return:
+    '''
+    path = os.path.join(setting.BASE_LOGDIR, "%s_shoprecord.log" %src.login_dict["name"])
+    timeStr = time.strftime("%Y-%m-%d %X ")
+    if os.path.exists(path):
+        with open(path,"r",encoding='utf-8') as f_read,open("shoprecord.log","w+",encoding='utf-8') as f_write:
+            for line in f_read:
+                f_write.write(line)
+
+            for item in shopcars:
+                f_write.write(timeStr + '  ' + item + "\n")
+            f_write.flush()
+            os.remove(path)
+            os.rename('shoprecord.log', path)
+    else:
+        with open(path,'w',encoding='utf-8') as f_write:
+            f_write.write(timeStr + '    消费如下')
+            for item in shopcars:
+                f_write.write(item + "\n")
+            f_write.flush()
+
+def get_shopping_record():
+    '''
+    购物记录
+    :return:
+    '''
+    path = os.path.join(setting.BASE_LOGDIR, "%s_shoprecord.log" % src.login_dict["name"])
+    if os.path.exists(path):
+        with open(path, "r", encoding='utf-8') as f_read:
+            for line in f_read:
+                print(line)
+    else:
+        print("当前暂无购买记录")

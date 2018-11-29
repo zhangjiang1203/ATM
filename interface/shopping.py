@@ -6,6 +6,7 @@
 # @File    : shopping.py
 # @Software: PyCharm
 from core import src
+from db import db_handler
 
 product_list = [['Iphone7',5800],
                 ['Coffee',30],
@@ -14,13 +15,12 @@ product_list = [['Iphone7',5800],
                 ['Bike',199],
                 ['ViVo X9',2499]]
 
-def shoppingAction():
+def go_shop():
     shopFlag = True
     shopCar = {}
     user_name = src.login_dict["name"]
     user_balance = src.login_dict["salary"]
     print("\033[32m尊敬的用户 %s 你的余额为%s,预祝你购物愉快\033[0m" % (user_name, user_balance))
-
     while shopFlag:
         for index, shop in enumerate(product_list):
             print(index, shop)
@@ -66,17 +66,24 @@ def shoppingAction():
                     if confirm not in ['y', 'n']: continue
                     # 修改账号余额，清空购物车
                     if confirm == "y":
-                        users = loginM.getUseraccount()
-                        for user in users[:]:
-                            if user["account"] == user_name:
-                                print("\033[31m此次购物总花费: %s  你的余额为: %s\033[0m" % (total, user_balance))
-                                users.remove(user)
-                                user["salary"] = user_balance
-                                users.append(user)
-                                loginM.changAllAccount(users)
-                                shopFlag = False
-                                shopCar = {}
-                                continue
+                        print("\033[31m此次购物总花费: %s  你的余额为: %s\033[0m" % (total, user_balance))
+                        db_handler.save(src.login_dict)
+                        #添加购物日志
+                        records = []
+                        title = "id          商品           数量          单价          总价"
+                        records.append(title)
+                        for i, key in enumerate(shopCar):
+                             goods = "%s%18s%10s%13s%13s " % (i, key, shopCar[key]["count"],
+                                                                         shopCar[key]["price"],
+                                                                         shopCar[key]["price"] * shopCar[key]["count"])
+                             records.append(goods)
+                        expenditure = "总共消费 %s" %total
+                        records.append(expenditure)
+                        db_handler.shopping_record(records)
+
+                        shopFlag = False
+                        shopCar = {}
+                        continue
                     else:
                         # 清空购物车
                         shopCar = {}

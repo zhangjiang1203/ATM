@@ -152,18 +152,18 @@ def check_records():
     bank.get_balance_detail()
 
 @common.login_auth
-@common.record
-def shopping():
+def goshop():
     #获取最新的数据
     global login_dict
     login_dict = user.user_exist(login_dict["name"])
-    shopping.shoppingAction()
+    print(login_dict)
+    shopping.go_shop()
 
 
 @common.login_auth
 @common.record
 def check_shoppingcard():
-    pass
+    db_handler.get_shopping_record()
 
 
 #将对应的功能和方法关联起来
@@ -175,7 +175,7 @@ fun_dic = {
     "5":repay,
     "6":withdraw,
     "7":check_records,
-    "8":shopping,
+    "8":goshop,
     "9":check_shoppingcard
 }
 

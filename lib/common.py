@@ -33,7 +33,6 @@ def login_auth(func):
                     if user_dict["password"] == password:
                         src.login_dict = user_dict
                         res = func(*args, **kwargs)
-                        print("登录成功")
                         break
                     else:
                         # 修改登录次数
@@ -64,4 +63,7 @@ def record(func):
         res = func(*args,**kwargs)
         return res
     return wrapper
+
+
+
 
