@@ -106,17 +106,21 @@ def shopping_record(shopcars):
         with open(path,"r",encoding='utf-8') as f_read,open("shoprecord.log","w+",encoding='utf-8') as f_write:
             for line in f_read:
                 f_write.write(line)
-
+            f_write.write("\n" + "start".center(80, "*"))
+            f_write.write("\n" + timeStr + '    消费如下\n')
             for item in shopcars:
-                f_write.write(timeStr + '  ' + item + "\n")
+                f_write.write(item + "\n")
+            f_write.write("end".center(80, "*"))
             f_write.flush()
             os.remove(path)
             os.rename('shoprecord.log', path)
     else:
         with open(path,'w',encoding='utf-8') as f_write:
-            f_write.write(timeStr + '    消费如下')
+            f_write.write("start".center(80, "*"))
+            f_write.write("\n" + timeStr + '    消费如下\n')
             for item in shopcars:
                 f_write.write(item + "\n")
+            f_write.write("end".center(80,"*"))
             f_write.flush()
 
 def get_shopping_record():
@@ -128,6 +132,6 @@ def get_shopping_record():
     if os.path.exists(path):
         with open(path, "r", encoding='utf-8') as f_read:
             for line in f_read:
-                print(line)
+                print("\033[32m"+line+"\033[0m")
     else:
         print("当前暂无购买记录")
